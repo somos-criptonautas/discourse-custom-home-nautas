@@ -17,7 +17,9 @@ any other path hits Discourse's server router, which only knows `/custom`.
 
 - **Hero** — title, subtitle, optional icon (`hero_icon`) and image (`hero_image`,
   beside the text on wide screens, above it on narrow ones). Signed-out visitors
-  also get a "Get started" button to `/signup`.
+  always see it, and get a "Get started" button to `/signup`; signed-in members
+  see it only if they are in a group picked in `hero_groups`, so it can run as a
+  banner aimed at new members.
 - **Featured topics** — horizontal card scroller (CSS scroll-snap, no JS). Shown
   only when `featured_topics_tags` or `featured_topics_categories` is set. Members
   pick the source from a dropdown and the choice is remembered per browser;
@@ -25,9 +27,12 @@ any other path hits Discourse's server router, which only knows `/custom`.
   access are dropped. Cards show the topic's **AI gist** instead of its excerpt
   when one exists, unless the viewer picked Compact or Excerpts on the
   excerpts/gists button.
-- **Latest discussions** and **hot topics** — topic lists (`featured_list_filter`,
-  `featured_list_count`, `hot_topics_count`) rendered with Horizon's topic cards
-  when attached to it, so they carry AI gists wherever the topic list does.
+- **Topic list** — one list, switchable from a dropdown between *Trending now*
+  (`hot`) and *Best of* the week, month or all time (`top` with a period), opening
+  on `topics_default_view` and remembered per browser. Falls back to latest when
+  the chosen view is empty, which Hot is until Discourse has scored topics.
+  Rendered with Horizon's topic cards when attached to it, so it carries AI gists
+  wherever the topic list does (`featured_list_count`).
 - **Leaderboard** — weekly, monthly or total karma, switchable from a dropdown and
   remembered per browser. Shows your own position when you are outside the top
   `leaderboard_count`. Needs `discourse_gamification_enabled`.

@@ -86,16 +86,28 @@ export default class BlockFeaturedList extends Component {
   async fetchTopics(viewKey) {
     const view = VIEWS.find((v) => v.key === viewKey) ?? VIEWS[0];
     const count = this.args.count || 10;
+    const topics = await this.#load(view.filter, view.period, count);
 
-    // per_page keeps the server from serializing a full page of 30 topics
-    // that we would only throw away client-side.
+    // Hot is empty until Discourse's scheduled job has scored topics, and a
+    // quiet period can leave Top empty too. An empty homepage is worse than a
+    // less precise one, so fall back to latest rather than render nothing.
+    if (topics || view.filter === "latest") {
+      return topics;
+    }
+
+    return this.#load("latest", null, count);
+  }
+
+  // per_page keeps the server from serializing a full page of 30 topics that
+  // we would only throw away client-side.
+  async #load(filter, period, count) {
     const params = { per_page: count };
-    if (view.period) {
-      params.period = view.period;
+    if (period) {
+      params.period = period;
     }
 
     const topicList = await this.store.findFiltered("topicList", {
-      filter: view.filter,
+      filter,
       params,
     });
 
