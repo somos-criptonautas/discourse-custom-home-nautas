@@ -18,6 +18,8 @@ import { eq, or } from "discourse/truth-helpers";
 import { i18n } from "discourse-i18n";
 
 // localStorage, so a member's pick survives the session and the next visit.
+// Prefix kept from the theme's old name: renaming it would discard every
+// member's saved picks for nothing.
 const preferences = new KeyValueStore("branded_custom_homepage_");
 const PERIOD_KEY = "leaderboard_period";
 
@@ -29,7 +31,7 @@ const PERIODS = [
   { key: "all", labelKey: "homepage.leaderboard.period.total" },
 ];
 
-@block("theme:branded-custom-homepage:leaderboard", {
+@block("theme:custom-home:leaderboard", {
   description: "Gamification leaderboard showing top users",
   args: {
     count: { type: "number", default: 8 },

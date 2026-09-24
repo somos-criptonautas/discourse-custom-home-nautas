@@ -17,6 +17,8 @@ import dIcon from "discourse/ui-kit/helpers/d-icon";
 import { i18n } from "discourse-i18n";
 
 // localStorage, so a member's pick survives the session and the next visit.
+// Prefix kept from the theme's old name: renaming it would discard every
+// member's saved picks for nothing.
 const preferences = new KeyValueStore("branded_custom_homepage_");
 const VIEW_KEY = "topics_view";
 
@@ -45,7 +47,7 @@ const VIEWS = [
   },
 ];
 
-@block("theme:branded-custom-homepage:featured-list", {
+@block("theme:custom-home:featured-list", {
   description: "Topic list switchable between trending and top of a period",
   args: {
     linkText: { type: "string" },

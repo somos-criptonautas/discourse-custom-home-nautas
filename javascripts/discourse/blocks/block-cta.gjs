@@ -6,7 +6,7 @@ import dIcon from "discourse/ui-kit/helpers/d-icon";
 import { and } from "discourse/truth-helpers";
 import { i18n } from "discourse-i18n";
 
-@block("theme:branded-custom-homepage:cta", {
+@block("theme:custom-home:cta", {
   description: "Call-to-action banner with title, description, and button",
   args: {
     title: { type: "string", required: true },

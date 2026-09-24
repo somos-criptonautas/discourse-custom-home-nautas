@@ -1,4 +1,4 @@
-# Branded Custom Homepage
+# Custom Home
 
 Discourse theme component with Meta-style homepage blocks. Adapted from
 [discourse/discourse-theme-skills](https://github.com/discourse/discourse-theme-skills).

@@ -20,10 +20,12 @@ import { i18n } from "discourse-i18n";
 
 // localStorage, so a member's pick survives the session and the next visit.
 // Nothing is written to the user's preferences or to the server.
+// Prefix kept from the theme's old name: renaming it would discard every
+// member's saved picks for nothing.
 const preferences = new KeyValueStore("branded_custom_homepage_");
 const SOURCE_KEY = "featured_source";
 
-@block("theme:branded-custom-homepage:featured-topics", {
+@block("theme:custom-home:featured-topics", {
   description: "Card grid of topics from a selectable tag or category",
   args: {
     tags: { type: "array", itemType: "string" },

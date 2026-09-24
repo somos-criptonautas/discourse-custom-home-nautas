@@ -5,7 +5,7 @@ import DButton from "discourse/ui-kit/d-button";
 import dIcon from "discourse/ui-kit/helpers/d-icon";
 import { i18n } from "discourse-i18n";
 
-@block("theme:branded-custom-homepage:hero", {
+@block("theme:custom-home:hero", {
   description: "Hero banner with title, subtitle, and call-to-action button",
   args: {
     title: { type: "string", required: true },

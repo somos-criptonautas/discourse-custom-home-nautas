@@ -18,7 +18,7 @@ function getLongDate(startsAt) {
   return longDate(new Date(startsAt));
 }
 
-@block("theme:branded-custom-homepage:upcoming-events", {
+@block("theme:custom-home:upcoming-events", {
   description: "Upcoming events from discourse-post-event plugin",
   args: {
     title: { type: "string" },
