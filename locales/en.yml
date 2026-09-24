@@ -12,7 +12,7 @@ en:
       cta_link: "URL for the call-to-action button"
       hero_icon: "Icon shown before the hero title. Use a Discourse icon name, e.g. `far-lightbulb`. Leave empty for none."
       hero_image: "Image shown beside the hero text — on the left on wide screens, above the text on narrow ones. Leave empty for none."
-      hero_groups: "Groups that still see the hero on the homepage once signed in — use it to announce something to new members. Group names, one per row. Empty hides it from everyone signed in; signed-out visitors always see it."
+      hero_groups: "Groups that still see the hero on the homepage once signed in — use it to announce something to new members. Add a row and pick the groups. Empty hides it from everyone signed in; signed-out visitors always see it."
       cta_icon: "Icon shown above the call-to-action title. Use a Discourse icon name. Leave empty for none."
   hero:
     title: "Build something great together"

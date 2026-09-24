@@ -12,7 +12,7 @@ es:
       cta_link: "URL del botón de llamada a la acción"
       hero_icon: "Icono que se muestra antes del título del hero. Usa un nombre de icono de Discourse, por ejemplo `far-lightbulb`. Déjalo vacío para no mostrar ninguno."
       hero_image: "Imagen que se muestra junto al texto del hero: a la izquierda en pantallas anchas y encima del texto en pantallas estrechas. Déjala vacía para no mostrar ninguna."
-      hero_groups: "Grupos que siguen viendo la cabecera en la portada una vez dentro — úsalo para anunciar algo a los miembros nuevos. Nombres de grupo, uno por fila. Vacío la oculta a todos los que hayan iniciado sesión; las visitas sin cuenta siempre la ven."
+      hero_groups: "Grupos que siguen viendo la cabecera en la portada una vez dentro — úsalo para anunciar algo a los miembros nuevos. Añade una fila y elige los grupos. Vacío la oculta a todos los que hayan iniciado sesión; las visitas sin cuenta siempre la ven."
       cta_icon: "Icono que se muestra encima del título de la llamada a la acción. Usa un nombre de icono de Discourse. Déjalo vacío para no mostrar ninguno."
   hero:
     title: "Construyamos algo grande juntos"
@@ -24,9 +24,9 @@ es:
       link_text: "Ver todos"
       empty: "No se encontraron temas."
       view:
-        hot: "En tendencia"
-        weekly: "Top de la semana"
-        monthly: "Top del mes"
+        hot: "La tendencia"
+        weekly: "Top semanal"
+        monthly: "Top mensual"
         all: "Top histórico"
     featured_topics:
       link_text: "Ver todos los destacados"

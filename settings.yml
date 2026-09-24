@@ -58,6 +58,10 @@ cta_icon:
   type: string
 
 hero_groups:
-  type: list
-  list_type: compact
-  default: "trust_level_0"
+  type: objects
+  default: []
+  schema:
+    name: audience
+    properties:
+      groups:
+        type: groups

@@ -3,10 +3,6 @@ import { apiInitializer } from "discourse/lib/api";
 import getURL from "discourse/lib/get-url";
 import BlockHero from "../blocks/block-hero";
 
-// List settings arrive as a pipe-separated string of group names, which is what
-// the user condition matches on.
-const heroGroups = (settings.hero_groups || "").split("|").filter(Boolean);
-
 // Shared hero args; the signup button is added only for signed-out visitors.
 const heroArgs = {
   title: "hero.title",
@@ -18,6 +14,14 @@ const heroArgs = {
 };
 
 export default apiInitializer((api) => {
+  // The groups picker stores ids; the user condition matches names. A group the
+  // site does not serialize resolves to nothing and is simply not matched.
+  const site = api.container.lookup("service:site");
+  const heroGroups = (settings.hero_groups || [])
+    .flatMap((row) => row.groups || [])
+    .map((id) => site.groupsById?.[id]?.name)
+    .filter(Boolean);
+
   api.renderBlocks("main-outlet-blocks", [
     {
       block: BlockHead,
