@@ -20,14 +20,14 @@ featured_list_count:
   min: 1
   max: 30
 
-featured_list_filter:
-  default: "latest"
+topics_default_view:
+  default: "hot"
   type: enum
   choices:
-    - latest
-    - top
-    - new
     - hot
+    - weekly
+    - monthly
+    - all
 
 leaderboard_count:
   default: 8
@@ -40,12 +40,6 @@ events_count:
   type: integer
   min: 1
   max: 15
-
-hot_topics_count:
-  default: 3
-  type: integer
-  min: 1
-  max: 10
 
 cta_link:
   default: "/signup"
@@ -62,3 +56,8 @@ hero_image:
 cta_icon:
   default: ""
   type: string
+
+hero_groups:
+  type: list
+  list_type: compact
+  default: "trust_level_0"

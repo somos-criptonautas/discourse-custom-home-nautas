@@ -21,8 +21,17 @@
     }
   }
 
-  &__title {
+  &__heading {
     @include section-title;
+    display: flex;
+    align-items: center;
+    min-width: 0;
+  }
+
+  // The picker is a button living inside the heading, so it takes the
+  // heading's type instead of the .btn defaults.
+  &__picker.btn {
+    @include section-picker;
   }
 
   &__link {
@@ -60,4 +69,10 @@
       }
     }
   }
+}
+
+// The menu content is portaled out of the block, so this cannot be nested
+// inside .block-featured-list.
+.block-featured-list__option {
+  @include section-picker-option;
 }

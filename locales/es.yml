@@ -6,31 +6,32 @@ es:
       featured_topics_categories: "Categorías entre las que un miembro puede elegir en la sección de destacados, listadas después de las etiquetas. Las categorías a las que el visitante no tiene acceso se ocultan automáticamente."
       featured_topics_count: "Número de temas destacados que se muestran"
       featured_list_count: "Número de temas en la lista destacada"
-      featured_list_filter: "Filtro de la lista destacada (latest, top, new, hot)"
+      topics_default_view: "Vista con la que abre la lista de temas, antes de que un miembro elija la suya. Su elección se recuerda por navegador."
       leaderboard_count: "Número de usuarios que se muestran en la tabla de clasificación"
       events_count: "Número de próximos eventos que se muestran"
-      hot_topics_count: "Número de temas calientes que se muestran"
       cta_link: "URL del botón de llamada a la acción"
       hero_icon: "Icono que se muestra antes del título del hero. Usa un nombre de icono de Discourse, por ejemplo `far-lightbulb`. Déjalo vacío para no mostrar ninguno."
       hero_image: "Imagen que se muestra junto al texto del hero: a la izquierda en pantallas anchas y encima del texto en pantallas estrechas. Déjala vacía para no mostrar ninguna."
+      hero_groups: "Grupos que siguen viendo la cabecera en la portada una vez dentro — úsalo para anunciar algo a los miembros nuevos. Nombres de grupo, uno por fila. Vacío la oculta a todos los que hayan iniciado sesión; las visitas sin cuenta siempre la ven."
       cta_icon: "Icono que se muestra encima del título de la llamada a la acción. Usa un nombre de icono de Discourse. Déjalo vacío para no mostrar ninguno."
   hero:
     title: "Construyamos algo grande juntos"
     subtitle: "Una comunidad de gente que crea, piensa y hace. Pregunta, comparte ideas y sube de nivel."
     button_label: "Empezar"
   homepage:
-    featured_list:
-      title: "Últimas discusiones"
-      link_text: "Ver todas"
-      empty: "No se encontraron discusiones."
+    topics:
+      change_view: "Cambiar la vista de temas"
+      link_text: "Ver todos"
+      empty: "No se encontraron temas."
+      view:
+        hot: "En tendencia"
+        weekly: "Top de la semana"
+        monthly: "Top del mes"
+        all: "Top histórico"
     featured_topics:
       link_text: "Ver todos los destacados"
       change_source: "Cambiar la etiqueta o categoría destacada"
       empty: "No se encontraron temas destacados."
-    hot_topics:
-      title: "Temas calientes"
-      link_text: "Ver todos"
-      empty: "No se encontraron temas calientes."
     leaderboard:
       change_period: "Cambiar el periodo de la clasificación"
       period:

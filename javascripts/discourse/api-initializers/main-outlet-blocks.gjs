@@ -3,6 +3,10 @@ import { apiInitializer } from "discourse/lib/api";
 import getURL from "discourse/lib/get-url";
 import BlockHero from "../blocks/block-hero";
 
+// List settings arrive as a pipe-separated string of group names, which is what
+// the user condition matches on.
+const heroGroups = (settings.hero_groups || "").split("|").filter(Boolean);
+
 // Shared hero args; the signup button is added only for signed-out visitors.
 const heroArgs = {
   title: "hero.title",
@@ -30,8 +34,19 @@ export default apiInitializer((api) => {
           },
           conditions: { type: "user", loggedIn: false },
         },
-        // Signed in: same hero, no "Get started" pitch.
-        { block: BlockHero, id: "homepage-hero-user", args: heroArgs },
+        // Signed in: the hero is a banner for the groups named in
+        // hero_groups only — for everyone else it is a pitch they have already
+        // accepted. An empty setting hides it from every member.
+        ...(heroGroups.length
+          ? [
+              {
+                block: BlockHero,
+                id: "homepage-hero-user",
+                args: heroArgs,
+                conditions: { type: "user", groups: heroGroups },
+              },
+            ]
+          : []),
       ],
     },
   ]);

@@ -6,31 +6,32 @@ en:
       featured_topics_categories: "Categories a member can pick between in the featured section, listed after the tags. Categories the viewer cannot access are hidden automatically."
       featured_topics_count: "Number of featured topics to display"
       featured_list_count: "Number of topics in the featured list"
-      featured_list_filter: "Filter for the featured list (latest, top, new, hot)"
+      topics_default_view: "View the topic list opens on, before a member picks their own. Their choice is remembered per browser."
       leaderboard_count: "Number of users shown on the leaderboard"
       events_count: "Number of upcoming events to show"
-      hot_topics_count: "Number of hot topics to show"
       cta_link: "URL for the call-to-action button"
       hero_icon: "Icon shown before the hero title. Use a Discourse icon name, e.g. `far-lightbulb`. Leave empty for none."
       hero_image: "Image shown beside the hero text — on the left on wide screens, above the text on narrow ones. Leave empty for none."
+      hero_groups: "Groups that still see the hero on the homepage once signed in — use it to announce something to new members. Group names, one per row. Empty hides it from everyone signed in; signed-out visitors always see it."
       cta_icon: "Icon shown above the call-to-action title. Use a Discourse icon name. Leave empty for none."
   hero:
     title: "Build something great together"
     subtitle: "A community for makers, thinkers, and doers. Ask questions, share ideas, and level up."
     button_label: "Get started"
   homepage:
-    featured_list:
-      title: "Latest discussions"
+    topics:
+      change_view: "Change the topic view"
       link_text: "View all"
-      empty: "No discussions found."
+      empty: "No topics found."
+      view:
+        hot: "Trending now"
+        weekly: "Best of the week"
+        monthly: "Best of the month"
+        all: "Best of all time"
     featured_topics:
       link_text: "See all featured"
       change_source: "Change the featured tag or category"
       empty: "No featured topics found."
-    hot_topics:
-      title: "Hot topics"
-      link_text: "View all"
-      empty: "No hot topics found."
     leaderboard:
       change_period: "Change the leaderboard period"
       period:
