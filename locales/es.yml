@@ -24,10 +24,10 @@ es:
       link_text: "Ver todos"
       empty: "No se encontraron temas."
       view:
-        hot: "La tendencia"
-        weekly: "Top semanal"
-        monthly: "Top mensual"
-        all: "Top histórico"
+        hot: "la tendencia"
+        weekly: "top semanal"
+        monthly: "top mensual"
+        all: "top histórico"
     featured_topics:
       link_text: "Ver todos los destacados"
       change_source: "Cambiar la etiqueta o categoría destacada"
