@@ -72,3 +72,9 @@
 .block-featured-list__option {
   @include section-picker-option;
 }
+
+// The sentinel carries no content: it only has to enter the viewport for the
+// observer to fire, and the margin gives the fetch a head start.
+.block-featured-list__sentinel {
+  height: 1px;
+}

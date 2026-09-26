@@ -24,6 +24,7 @@ en:
       link_text: "View all"
       empty: "No topics found."
       view:
+        latest: "Latest"
         hot: "Trending now"
         weekly: "Best of the week"
         monthly: "Best of the month"

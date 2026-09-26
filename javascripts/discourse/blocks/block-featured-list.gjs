@@ -1,5 +1,6 @@
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
+import didInsert from "@ember/render-modifiers/modifiers/did-insert";
 import { fn } from "@ember/helper";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
@@ -22,10 +23,16 @@ import { i18n } from "discourse-i18n";
 const preferences = new KeyValueStore("branded_custom_homepage_");
 const VIEW_KEY = "topics_view";
 
-// Hot carries its own recency decay, so it takes no period. Top needs one, and
-// the labels say "now" against "best of X" because "hot" and "top" do not read
-// as different things to anyone who has not read the Discourse docs.
+// Only Top takes a period: Latest orders by last activity and Hot bakes its own
+// decay into the score. The labels say "now" against "best of X" because "hot"
+// and "top" do not read as different things to anyone who has not read the
+// Discourse docs.
+
+// Pages the sentinel will append before it gives up and leaves the "view all"
+// link to do the rest. The homepage is a doorway, not an endless feed.
+const MAX_PAGES = 3;
 const VIEWS = [
+  { key: "latest", labelKey: "homepage.topics.view.latest", filter: "latest" },
   { key: "hot", labelKey: "homepage.topics.view.hot", filter: "hot" },
   {
     key: "weekly",
@@ -52,7 +59,7 @@ const VIEWS = [
   args: {
     linkText: { type: "string" },
     count: { type: "number", default: 10 },
-    defaultView: { type: "string", default: "hot" },
+    defaultView: { type: "string", default: "latest" },
     emptyMessage: { type: "string" },
     listContext: { type: "string", default: "discovery" },
   },
@@ -61,6 +68,13 @@ export default class BlockFeaturedList extends Component {
   @service store;
 
   @tracked selectedKey = preferences.get(VIEW_KEY);
+  @tracked topics = [];
+
+  #list = null;
+  #observer = null;
+  #loading = false;
+  #pages = 1;
+  #exhausted = false;
 
   get selected() {
     return (
@@ -86,16 +100,22 @@ export default class BlockFeaturedList extends Component {
   async fetchTopics(viewKey) {
     const view = VIEWS.find((v) => v.key === viewKey) ?? VIEWS[0];
     const count = this.args.count || 10;
-    const topics = await this.#load(view.filter, view.period, count);
+    let list = await this.#load(view.filter, view.period, count);
 
     // Hot is empty until Discourse's scheduled job has scored topics, and a
     // quiet period can leave Top empty too. An empty homepage is worse than a
     // less precise one, so fall back to latest rather than render nothing.
-    if (topics || view.filter === "latest") {
-      return topics;
+    if (!list?.topics?.length && view.filter !== "latest") {
+      list = await this.#load("latest", null, count);
     }
 
-    return this.#load("latest", null, count);
+    // Every assignment happens after an await, so none of it lands mid-render.
+    this.#list = list;
+    this.#pages = 1;
+    this.#exhausted = false;
+    this.topics = list?.topics?.slice(0, count) ?? [];
+
+    return this.topics.length ? this.topics : null;
   }
 
   // per_page keeps the server from serializing a full page of 30 topics that
@@ -106,12 +126,68 @@ export default class BlockFeaturedList extends Component {
       params.period = period;
     }
 
-    const topicList = await this.store.findFiltered("topicList", {
-      filter,
-      params,
-    });
+    return this.store.findFiltered("topicList", { filter, params });
+  }
 
-    return topicList.topics?.length ? topicList.topics.slice(0, count) : null;
+  get canLoadMore() {
+    return !this.#exhausted && this.#pages < MAX_PAGES;
+  }
+
+  // The sentinel is an empty div after the list: IntersectionObserver leaves it
+  // inert until it is actually scrolled into view, so an unscrolled homepage
+  // costs nothing beyond the element itself.
+  @action
+  watchSentinel(element) {
+    this.#observer?.disconnect();
+    this.#observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          this.loadMore();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    this.#observer.observe(element);
+  }
+
+  willDestroy() {
+    super.willDestroy(...arguments);
+    this.#observer?.disconnect();
+  }
+
+  @action
+  async loadMore() {
+    // The guard is what keeps a fast scroll from firing overlapping requests.
+    if (this.#loading || !this.canLoadMore) {
+      return;
+    }
+
+    if (typeof this.#list?.loadMore !== "function") {
+      this.#exhausted = true;
+      return;
+    }
+
+    this.#loading = true;
+
+    try {
+      const before = this.#list.topics?.length ?? 0;
+      await this.#list.loadMore();
+      const after = this.#list.topics?.length ?? 0;
+
+      // No growth means the server has nothing left; asking again would loop.
+      if (after > before) {
+        this.topics = [...this.#list.topics];
+        this.#pages++;
+      } else {
+        this.#exhausted = true;
+      }
+    } catch {
+      // A failed page should stop the sentinel, not break the list already on
+      // screen. The "view all" link remains the way out.
+      this.#exhausted = true;
+    } finally {
+      this.#loading = false;
+    }
   }
 
   <template>
@@ -177,14 +253,21 @@ export default class BlockFeaturedList extends Component {
           </div>
         </:empty>
 
-        <:content as |topics|>
+        <:content>
           <div class="block-featured-list__list">
             <BasicTopicList
-              @topics={{topics}}
+              @topics={{this.topics}}
               @showPosters={{true}}
               @listContext={{@listContext}}
             />
           </div>
+
+          {{#if this.canLoadMore}}
+            <div
+              class="block-featured-list__sentinel"
+              {{didInsert this.watchSentinel}}
+            ></div>
+          {{/if}}
         </:content>
       </DAsyncContent>
     </div>

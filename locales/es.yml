@@ -24,6 +24,7 @@ es:
       link_text: "ver todo"
       empty: "No se encontraron temas."
       view:
+        latest: "lo último"
         hot: "la tendencia"
         weekly: "top semanal"
         monthly: "top mensual"

@@ -21,9 +21,10 @@ featured_list_count:
   max: 30
 
 topics_default_view:
-  default: "hot"
+  default: "latest"
   type: enum
   choices:
+    - latest
     - hot
     - weekly
     - monthly

@@ -27,10 +27,14 @@ any other path hits Discourse's server router, which only knows `/custom`.
   access are dropped. Cards show the topic's **AI gist** instead of its excerpt
   when one exists, unless the viewer picked Compact or Excerpts on the
   excerpts/gists button.
-- **Topic list** — one list, switchable from a dropdown between *Trending now*
-  (`hot`) and *Best of* the week, month or all time (`top` with a period), opening
-  on `topics_default_view` and remembered per browser. Falls back to latest when
-  the chosen view is empty, which Hot is until Discourse has scored topics.
+- **Topic list** — one list, switchable from a dropdown between *Latest*,
+  *Trending now* (`hot`) and *Best of* the week, month or all time (`top` with a
+  period), opening on `topics_default_view` and remembered per browser. Only Top
+  takes a period: Latest orders by last activity, Hot bakes its own decay into
+  the score. Falls back to latest when the chosen view is empty, which Hot is
+  until Discourse has scored topics. Scrolling to the end appends up to two more
+  pages through an IntersectionObserver, then leaves the "view all" link to do
+  the rest — nothing loads until the end of the list is actually reached.
   Rendered with Horizon's topic cards when attached to it, so it carries AI gists
   wherever the topic list does (`featured_list_count`).
 - **Leaderboard** — weekly, monthly or total karma, switchable from a dropdown and
