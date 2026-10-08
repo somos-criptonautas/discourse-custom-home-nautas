@@ -1,6 +1,5 @@
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
-import didInsert from "@ember/render-modifiers/modifiers/did-insert";
 import { fn } from "@ember/helper";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
@@ -28,9 +27,6 @@ const VIEW_KEY = "topics_view";
 // and "top" do not read as different things to anyone who has not read the
 // Discourse docs.
 
-// Pages the sentinel will append before it gives up and leaves the "view all"
-// link to do the rest. The homepage is a doorway, not an endless feed.
-const MAX_PAGES = 3;
 const VIEWS = [
   { key: "latest", labelKey: "homepage.topics.view.latest", filter: "latest" },
   { key: "hot", labelKey: "homepage.topics.view.hot", filter: "hot" },
@@ -70,12 +66,6 @@ export default class BlockFeaturedList extends Component {
   @tracked selectedKey = preferences.get(VIEW_KEY);
   @tracked topics = [];
 
-  #list = null;
-  #observer = null;
-  #loading = false;
-  #pages = 1;
-  #exhausted = false;
-
   get selected() {
     return (
       VIEWS.find((v) => v.key === this.selectedKey) ??
@@ -99,7 +89,11 @@ export default class BlockFeaturedList extends Component {
   @bind
   async fetchTopics(viewKey) {
     const view = VIEWS.find((v) => v.key === viewKey) ?? VIEWS[0];
-    const count = this.args.count || 10;
+    // Two pages worth in one request: double the configured count, fetched up
+    // front. Nothing is appended while the reader scrolls — a list that kept
+    // growing under them shifted the page (and the sidebar with it) mid-scroll.
+    // The homepage is a doorway, not an endless feed: "view all" does the rest.
+    const count = (this.args.count || 10) * 2;
     let list = await this.#load(view.filter, view.period, count);
 
     // Hot is empty until Discourse's scheduled job has scored topics, and a
@@ -110,9 +104,6 @@ export default class BlockFeaturedList extends Component {
     }
 
     // Every assignment happens after an await, so none of it lands mid-render.
-    this.#list = list;
-    this.#pages = 1;
-    this.#exhausted = false;
     this.topics = list?.topics?.slice(0, count) ?? [];
 
     return this.topics.length ? this.topics : null;
@@ -127,67 +118,6 @@ export default class BlockFeaturedList extends Component {
     }
 
     return this.store.findFiltered("topicList", { filter, params });
-  }
-
-  get canLoadMore() {
-    return !this.#exhausted && this.#pages < MAX_PAGES;
-  }
-
-  // The sentinel is an empty div after the list: IntersectionObserver leaves it
-  // inert until it is actually scrolled into view, so an unscrolled homepage
-  // costs nothing beyond the element itself.
-  @action
-  watchSentinel(element) {
-    this.#observer?.disconnect();
-    this.#observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          this.loadMore();
-        }
-      },
-      { rootMargin: "200px" }
-    );
-    this.#observer.observe(element);
-  }
-
-  willDestroy() {
-    super.willDestroy(...arguments);
-    this.#observer?.disconnect();
-  }
-
-  @action
-  async loadMore() {
-    // The guard is what keeps a fast scroll from firing overlapping requests.
-    if (this.#loading || !this.canLoadMore) {
-      return;
-    }
-
-    if (typeof this.#list?.loadMore !== "function") {
-      this.#exhausted = true;
-      return;
-    }
-
-    this.#loading = true;
-
-    try {
-      const before = this.#list.topics?.length ?? 0;
-      await this.#list.loadMore();
-      const after = this.#list.topics?.length ?? 0;
-
-      // No growth means the server has nothing left; asking again would loop.
-      if (after > before) {
-        this.topics = [...this.#list.topics];
-        this.#pages++;
-      } else {
-        this.#exhausted = true;
-      }
-    } catch {
-      // A failed page should stop the sentinel, not break the list already on
-      // screen. The "view all" link remains the way out.
-      this.#exhausted = true;
-    } finally {
-      this.#loading = false;
-    }
   }
 
   <template>
@@ -261,13 +191,6 @@ export default class BlockFeaturedList extends Component {
               @listContext={{@listContext}}
             />
           </div>
-
-          {{#if this.canLoadMore}}
-            <div
-              class="block-featured-list__sentinel"
-              {{didInsert this.watchSentinel}}
-            ></div>
-          {{/if}}
         </:content>
       </DAsyncContent>
     </div>

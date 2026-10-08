@@ -5,7 +5,7 @@ es:
       featured_topics_tags: "Etiquetas entre las que un miembro puede elegir en la sección de destacados. La primera es la predeterminada y es la que ven los visitantes sin cuenta."
       featured_topics_categories: "Categorías entre las que un miembro puede elegir en la sección de destacados, listadas después de las etiquetas. Las categorías a las que el visitante no tiene acceso se ocultan automáticamente."
       featured_topics_count: "Número de temas destacados que se muestran"
-      featured_list_count: "Número de temas en la lista destacada"
+      featured_list_count: "Número base de temas en la lista destacada; la vista muestra el doble"
       topics_default_view: "Vista con la que abre la lista de temas, antes de que un miembro elija la suya. Su elección se recuerda por navegador."
       leaderboard_count: "Número de usuarios que se muestran en la tabla de clasificación"
       events_count: "Número de próximos eventos que se muestran"

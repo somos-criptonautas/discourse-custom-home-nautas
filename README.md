@@ -32,9 +32,9 @@ any other path hits Discourse's server router, which only knows `/custom`.
   period), opening on `topics_default_view` and remembered per browser. Only Top
   takes a period: Latest orders by last activity, Hot bakes its own decay into
   the score. Falls back to latest when the chosen view is empty, which Hot is
-  until Discourse has scored topics. Scrolling to the end appends up to two more
-  pages through an IntersectionObserver, then leaves the "view all" link to do
-  the rest — nothing loads until the end of the list is actually reached.
+  until Discourse has scored topics. Fetches twice `featured_list_count` in one
+  go — two pages up front, so every view opens on double the topics — and never
+  appends while you scroll: the "view all" link does the rest.
   Rendered with Horizon's topic cards when attached to it, so it carries AI gists
   wherever the topic list does (`featured_list_count`).
 - **Leaderboard** — weekly, monthly or total karma, switchable from a dropdown and

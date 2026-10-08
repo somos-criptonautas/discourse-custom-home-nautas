@@ -5,7 +5,7 @@ en:
       featured_topics_tags: "Tags a member can pick between in the featured section. The first one is the default and is what signed-out visitors see."
       featured_topics_categories: "Categories a member can pick between in the featured section, listed after the tags. Categories the viewer cannot access are hidden automatically."
       featured_topics_count: "Number of featured topics to display"
-      featured_list_count: "Number of topics in the featured list"
+      featured_list_count: "Base number of topics in the featured list; the view displays twice this many"
       topics_default_view: "View the topic list opens on, before a member picks their own. Their choice is remembered per browser."
       leaderboard_count: "Number of users shown on the leaderboard"
       events_count: "Number of upcoming events to show"
