@@ -58,3 +58,9 @@ to include signed-out visitors). Without that, cards fall back to the excerpt.
 Upload in **Admin > Customize > Themes** and attach it to your active theme. Then
 either set the homepage to the custom page, or leave Latest as default and link to
 `/custom`.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
+
+Text of this README under [CC BY-NC-SA 4.0](CC-BY-NC-SA-4.0.txt).
