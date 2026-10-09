@@ -2,6 +2,8 @@
 
 **ENGLISH** | [ESPAÑOL](README.es.md)
 
+Maintained by Criptonautas. Not affiliated with or endorsed by Discourse (Civilized Discourse Construction Kit, Inc.).
+
 Discourse theme component with Meta-style homepage blocks. Adapted from
 [discourse/discourse-theme-skills](https://github.com/discourse/discourse-theme-skills).
 
