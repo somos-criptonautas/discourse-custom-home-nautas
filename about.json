@@ -1,7 +1,7 @@
 {
-  "name": "Custom Home",
+  "name": "Custom Home Nautas",
   "component": true,
-  "authors": "Discourse",
+  "authors": "Discourse — Forked by Criptonautas",
   "about_url": "https://github.com/somos-criptonautas/discourse-custom-home-nautas",
   "license_url": "https://github.com/somos-criptonautas/discourse-custom-home-nautas/blob/main/LICENSE",
   "theme_version": "0.0.1",

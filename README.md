@@ -1,4 +1,6 @@
-# Custom Home
+# Custom Home Nautas
+
+**ENGLISH** | [ESPAÑOL](README.es.md)
 
 Discourse theme component with Meta-style homepage blocks. Adapted from
 [discourse/discourse-theme-skills](https://github.com/discourse/discourse-theme-skills).
@@ -61,6 +63,6 @@ either set the homepage to the custom page, or leave Latest as default and link 
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+MIT (upstream: Civilized Discourse Construction Kit, Inc.). Modifications © 2026 Criptonautas. See [LICENSE](LICENSE).
 
 Text of this README under [CC BY-NC-SA 4.0](CC-BY-NC-SA-4.0.txt).
