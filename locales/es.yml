@@ -21,7 +21,7 @@ es:
   homepage:
     topics:
       change_view: "Cambiar la vista de temas"
-      link_text: "ver todo"
+      link_text: "ver más"
       empty: "No se encontraron temas."
       view:
         latest: "lo último"

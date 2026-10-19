@@ -21,7 +21,7 @@ en:
   homepage:
     topics:
       change_view: "Change the topic view"
-      link_text: "View all"
+      link_text: "View more"
       empty: "No topics found."
       view:
         latest: "Latest"

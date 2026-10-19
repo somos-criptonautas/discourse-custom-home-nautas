@@ -40,10 +40,15 @@ const PERIODS = [
 })
 export default class BlockLeaderboard extends Component {
   @service siteSettings;
+  @service currentUser;
 
   @tracked selectedKey = preferences.get(PERIOD_KEY);
 
   get selected() {
+    // Visitors get the all-time board and no picker.
+    if (!this.currentUser) {
+      return PERIODS.find((o) => o.key === "all");
+    }
     return (
       PERIODS.find((o) => o.key === this.selectedKey) ??
       PERIODS.find((o) => o.key === (this.args.period || "weekly")) ??
@@ -85,33 +90,37 @@ export default class BlockLeaderboard extends Component {
     <div class="block-leaderboard__layout">
       <div class="block-leaderboard__header">
         <h2 class="block-leaderboard__heading">
-          <DMenu
-            @identifier="leaderboard-period"
-            @modalForMobile={{true}}
-            @triggerClass="block-leaderboard__picker"
-            @ariaLabel={{i18n
-              (themePrefix "homepage.leaderboard.change_period")
-            }}
-          >
-            <:trigger>
-              {{i18n (themePrefix this.selected.labelKey)}}
-              {{dIcon "angle-down"}}
-            </:trigger>
-            <:content as |menu|>
-              <DropdownMenu as |dropdown|>
-                {{#each PERIODS as |option|}}
-                  <dropdown.item>
-                    <DButton
-                      class="btn-transparent block-leaderboard__option
-                        {{if (eq option.key this.selected.key) '--active'}}"
-                      @translatedLabel={{i18n (themePrefix option.labelKey)}}
-                      @action={{fn this.select option.key menu.close}}
-                    />
-                  </dropdown.item>
-                {{/each}}
-              </DropdownMenu>
-            </:content>
-          </DMenu>
+          {{#if this.currentUser}}
+            <DMenu
+              @identifier="leaderboard-period"
+              @modalForMobile={{true}}
+              @triggerClass="block-leaderboard__picker"
+              @ariaLabel={{i18n
+                (themePrefix "homepage.leaderboard.change_period")
+              }}
+            >
+              <:trigger>
+                {{i18n (themePrefix this.selected.labelKey)}}
+                {{dIcon "angle-down"}}
+              </:trigger>
+              <:content as |menu|>
+                <DropdownMenu as |dropdown|>
+                  {{#each PERIODS as |option|}}
+                    <dropdown.item>
+                      <DButton
+                        class="btn-transparent block-leaderboard__option
+                          {{if (eq option.key this.selected.key) '--active'}}"
+                        @translatedLabel={{i18n (themePrefix option.labelKey)}}
+                        @action={{fn this.select option.key menu.close}}
+                      />
+                    </dropdown.item>
+                  {{/each}}
+                </DropdownMenu>
+              </:content>
+            </DMenu>
+          {{else}}
+            {{i18n (themePrefix this.selected.labelKey)}}
+          {{/if}}
         </h2>
       </div>
 

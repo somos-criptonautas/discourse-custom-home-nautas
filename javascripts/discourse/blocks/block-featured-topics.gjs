@@ -8,6 +8,7 @@ import DAsyncContent from "discourse/ui-kit/d-async-content";
 import DButton from "discourse/ui-kit/d-button";
 import DropdownMenu from "discourse/components/dropdown-menu";
 import DMenu from "discourse/float-kit/components/d-menu";
+import { ajax } from "discourse/lib/ajax";
 import dAvatar from "discourse/ui-kit/helpers/d-avatar";
 import dCategoryLink from "discourse/ui-kit/helpers/d-category-link";
 import dIcon from "discourse/ui-kit/helpers/d-icon";
@@ -39,19 +40,41 @@ const SOURCE_KEY = "featured_source";
 export default class BlockFeaturedTopics extends Component {
   @service store;
   @service site;
-  @service currentUser;
   // discourse-ai's layout preference, set by the excerpts/gists button. Optional
   // chaining because the service is absent when discourse-ai is disabled.
   @service gists;
 
-  @tracked selectedKey = this.currentUser ? preferences.get(SOURCE_KEY) : null;
+  @tracked selectedKey = preferences.get(SOURCE_KEY);
+  // Tag names in the viewer's language, keyed by the tag as configured.
+  @tracked tagNames = {};
+
+  constructor() {
+    super(...arguments);
+    this.loadTagNames();
+  }
+
+  // The setting stores the tag itself; its translated name (content
+  // localization) only comes back from the tag's info endpoint.
+  async loadTagNames() {
+    const tags = this.args.tags ?? [];
+    const names = await Promise.all(
+      tags.map((tag) =>
+        ajax(`/tag/${encodeURIComponent(tag)}/info.json`)
+          .then((data) => data.tag_info?.name)
+          .catch(() => null)
+      )
+    );
+    this.tagNames = Object.fromEntries(
+      tags.map((tag, i) => [tag, names[i] || tag])
+    );
+  }
 
   get options() {
     const filter = this.args.filter || "latest";
 
     const tags = (this.args.tags ?? []).map((tag) => ({
       key: `t:${tag}`,
-      label: tag,
+      label: this.tagNames[tag] ?? tag,
       filter: `tag/${tag}/l/${filter}`,
       url: getURL(`/tag/${tag}`),
     }));
@@ -89,10 +112,9 @@ export default class BlockFeaturedTopics extends Component {
       : topic.ai_topic_gist;
   }
 
-  // Anonymous visitors always get the first option; only members choose, and
-  // only when there is more than one thing to choose between.
+  // Only when there is more than one thing to choose between.
   get canSwitch() {
-    return !!this.currentUser && this.options.length > 1;
+    return this.options.length > 1;
   }
 
   @action
